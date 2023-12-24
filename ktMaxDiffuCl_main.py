@@ -70,7 +70,6 @@ class Dataset(torch.utils.data.Dataset):
         label = np.array(self.df.iloc[idx]['label'], dtype=np.float32)
         return user_id, item_id, label
 
-# 主程序
 def main():
     print('arguments...')
     for k,v in sorted(vars(args).items()):
@@ -120,7 +119,7 @@ def main():
     print('k_list', len(k_list))
     # sys.exit(0)
 
-    ### 数据初始化 Embedding
+    ### Embedding
     usr_emb = torch.nn.Embedding(n_user, args.dim).to(device)
     ent_emb = torch.nn.Embedding(n_entity, args.dim).to(device)
     rel_emb = torch.nn.Embedding(n_relation, args.dim).to(device)
@@ -243,8 +242,8 @@ def ctr_eval(model, criterion, data_loader, device):
     # all_f1= 0.0
     for i, (user_ids, item_ids, labels) in enumerate(data_loader):
         user_ids, item_ids, labels = user_ids.to(device), item_ids.to(device), labels.to(device)
-        if len(user_ids) == args.batch_size:  # 确保长度一致
-            outputs = model(user_ids, item_ids)  # 模型输出预测结果
+        if len(user_ids) == args.batch_size:  
+            outputs = model(user_ids, item_ids)  
             loss = criterion(outputs, labels)
                 
             # labels = labels.cpu().detach().numpy()
@@ -345,15 +344,7 @@ def topk_settings(train_data, test_data, num_item):
         user_list = np.random.choice(user_list, size=user_num, replace=False)
     item_set = set(list(range(num_item)))
 
-    # '''统计点击序列的平均长度'''
-    # print('-----------统计点击序列的平均长度------------')
-    # sum = 0
-    # for k, v in train_record.items():
-    #     sum += len(list(v))
-    # print(sum / len(list(train_record.keys())))  # 13.58716577540107
-
-    # 固定点击序列的长度
-    user_click_item_pos = defaultdict(list)  # 点击序列的平均长度62.4
+    user_click_item_pos = defaultdict(list) 
     for k, v in train_record.items():
         if len(v) >= args.click_sequence_size:
             values = random.sample(list(v), k=args.click_sequence_size)
