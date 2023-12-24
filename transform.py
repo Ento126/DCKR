@@ -25,10 +25,9 @@ class Transform(nn.Module):
         # self.fc1 = nn.Linear(self.pad_size * self.dim_model, self.dim)
 
             
-    # Tansformer 网络结构
     def forward(self, x): 
         # out = self.embedding(x[0])
-        out = self.postion_embedding(x)  # 位置编码
+        out = self.postion_embedding(x)
         for encoder in self.encoders:
             out = encoder(out)
         # out = torch.sum(out, dim=1)
@@ -91,13 +90,13 @@ class Multi_Head_Attention(nn.Module):
         V = V.view(batch_size * self.num_head, -1, self.dim_head)
         # if mask:  # TODO
         #     mask = mask.repeat(self.num_head, 1, 1)  # TODO change this
-        scale = K.size(-1) ** -0.5  # 缩放因子
+        scale = K.size(-1) ** -0.5  
         context = self.attention(Q, K, V, scale)
 
         context = context.view(batch_size, -1, self.dim_head * self.num_head)
         out = self.fc(context)
         out = self.dropout(out)
-        out = out + x  # 残差连接
+        out = out + x 
         out = self.layer_norm(out)
         return out
 
@@ -115,7 +114,7 @@ class Position_wise_Feed_Forward(nn.Module):
         out = F.relu(out)
         out = self.fc2(out)
         out = self.dropout(out)
-        out = out + x  # 残差连接
+        out = out + x 
         out = self.layer_norm(out)
         return out
 
