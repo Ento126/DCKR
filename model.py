@@ -7,6 +7,7 @@ from torch import nn
 
 from ktMaxDiffuCl.aggregator import Aggregator
 from ktMaxDiffuCl.context import Context
+from ktMaxDiffuCl.gaussian_diffusion import *
 from ktMaxDiffuCl.transform import Transform
 
 
